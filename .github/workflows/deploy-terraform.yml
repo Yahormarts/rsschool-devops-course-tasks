@@ -33,7 +33,7 @@ jobs:
           terraform_version: 1.3.0
 
       - name: Terraform init
-        run: terraform init
+        run: terraform init -backend-config="access_key=AKIAYKFQRCHDF6F6TF6V" -backend-config="secret_key=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"
 
       - name: Terraform plan
         run: terraform plan
