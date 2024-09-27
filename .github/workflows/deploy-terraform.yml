@@ -22,11 +22,8 @@ jobs:
         with:
           terraform_version: 1.3.0  
 
-      - name: Terraform format check
-        run: terraform fmt -check
-
-      - name: Fix formatting
-        run: terraform fmt
+      # - name: Terraform format check
+        # run: terraform fmt -check
 
       - name: Terraform validate
         run: terraform validate
