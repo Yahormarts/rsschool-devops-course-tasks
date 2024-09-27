@@ -15,14 +15,11 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           role-to-assume: arn:aws:iam::571600867782:role/GitHubActionsRole
           aws-region: us-east-1
           role-session-name: GitHubActionsSession
 
       - name: List S3 buckets
         run: aws s3 ls
-        
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.assume-role.outputs.aws-access-key-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.assume-role.outputs.aws-secret-access-key }}
-          AWS_SESSION_TOKEN: ${{ steps.assume-role.outputs.aws-session-token }}
