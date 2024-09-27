@@ -17,8 +17,8 @@ jobs:
         with:
           terraform_version: 1.3.0  
 
-     #  - name: Terraform format check
-       #  run: terraform fmt -check main.tf
+      - name: Terraform format check
+        run: terraform fmt -check
 
   terraform-plan:
     runs-on: ubuntu-latest
