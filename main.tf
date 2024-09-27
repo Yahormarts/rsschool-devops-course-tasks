@@ -1,11 +1,12 @@
 terraform {
   backend "s3" {
-    bucket         = "my-bucket-task-rs"
-    key            = "terraform.tfstate"         
-    region         = "eu-north-1"                                      
+    bucket = var.bucket_name
+    key    = "terraform.tfstate"
+    region = var.region
   }
 }
 
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "my-bucket-task-rs"  # Используйте ваше имя бакета
+  bucket = var.bucket_name  
+  acl    = "private"        
 }
