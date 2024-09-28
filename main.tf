@@ -1,12 +1,9 @@
 terraform {
   backend "s3" {
-    bucket = var.bucket_name
-    key    = "terraform.tfstate"
-    region = var.region
+    bucket         = "my-bucket-task-rs"
+    key            = "terraform.tfstate"
+    region         = "eu-north-1"
+    dynamodb_table = "terraform-state-lock"
+    encrypt        = true
   }
-}
-
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = var.bucket_name
-  acl    = "private"
 }
