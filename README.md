@@ -1,95 +1,95 @@
-Overview
+# Overview
 This project is a Terraform-based infrastructure deployment for various cloud resources. It provides a robust framework for managing and deploying AWS resources using Infrastructure as Code (IaC) principles. The setup focuses on creating scalable and manageable infrastructure, promoting best practices in DevOps.
 
 [![Terraform Deployment](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-terraform.yml/badge.svg)](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-terraform.yml)
 
 [![Deploy to AWS](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-aws.yml/badge.svg)](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-aws.yml)
 
-(SCREENSHOTS ARE BELLOW)
+_(SCREENSHOTS ARE BELLOW)_
 
-\\\Getting Started\\\
--Prerequisites-
+## Getting Started
+### Prerequisites
 Before you begin, ensure you have met the following requirements:
 
---Configuration--
+**Configuration**
 1) Clone the Repository:
-
+```
 git clone https://github.com/Yahormarts/rsschool-devops-course-tasks.git
 
 cd rsschool-devops-course-tasks
-
+```
 2) Set Up AWS Credentials: Ensure your AWS credentials are configured in your environment. This can be done by setting environment variables or through the AWS credentials file:
-
+```
 export AWS_ACCESS_KEY_ID=<your_access_key>
 
 export AWS_SECRET_ACCESS_KEY=<your_secret_key>
+```
+**Terraform**: Install Terraform (lastest version). You can download it from terraform.io.
 
->Terraform: Install Terraform (lastest version). You can download it from terraform.io.
+**AWS CLI**: Install and configure the AWS CLI. Make sure you have valid AWS credentials set up. Instructions can be found here.
 
->AWS CLI: Install and configure the AWS CLI. Make sure you have valid AWS credentials set up. Instructions can be found here.
+**Git**: Install Git for version control.
 
->Git: Install Git for version control.
-
---Variables--
+**Variables**
 
 The following variables can be customized in variables.tf:
 
->region: The AWS region where resources will be deployed (default: eu-north-1).
+1) region: The AWS region where resources will be deployed (default: eu-north-1).
 
->bucket_name: The name of the S3 bucket used for storing the Terraform state (default: my-bucket-task-rs).
+2) bucket_name: The name of the S3 bucket used for storing the Terraform state (default: my-bucket-task-rs).
 
---Usage--
+### Usage
 
 To deploy the infrastructure, follow these steps:
 
 1) Initialize Terraform: This command will initialize your Terraform environment and download necessary providers
-
+```
 terraform init
-
+```
 2) Format the Code (Optional): It is recommended to format the code to follow best practices.
-
+```
 terraform fmt
-
+```
 3) Validate the Configuration: Validate the Terraform files to ensure syntax correctness.
-
+```
 terraform validate
-
+```
 4) Plan the Deployment: Create an execution plan to preview changes that will be made.
-
+```
 terraform plan
-
+```
 5) Apply the Configuration: Deploy the infrastructure as defined in the configuration files.
-
+```
 terraform apply -auto-approve
-
---State Management--
+```
+**State Management**
 
 This project uses an S3 bucket for storing the Terraform state file. Ensure the specified bucket exists in your AWS account or modify the bucket_name variable to an existing bucket.
 
---Locking State--
+**Locking State**
 
 DynamoDB is used to manage state locking to prevent concurrent operations. Ensure you have a DynamoDB table configured with the proper name and permissions.
 
---Additional Notes--
+### Additional Notes
 
 Always check for any required IAM permissions needed for the operations being performed.
 Monitor AWS service limits to avoid service interruptions.
 
---Contributing--
+### Contributing
 
 Contributions are welcome! Please follow these steps:
 
->Fork the repository.
+- Fork the repository.
 
->Create your feature branch.
+- Create your feature branch.
 
->Commit your changes.
+- Commit your changes.
 
->Push to the branch.
+- Push to the branch.
 
->Open a Pull Request.
+- Open a Pull Request.
 
-\\\SCREENSHOTS\\\
+## SCREENSHOTS
 
 >IAM User created:
 
