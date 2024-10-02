@@ -24,7 +24,7 @@ export AWS_ACCESS_KEY_ID=<your_access_key>
 
 export AWS_SECRET_ACCESS_KEY=<your_secret_key>
 
->Terraform: Install Terraform (version X.X.X or later). You can download it from terraform.io.
+>Terraform: Install Terraform (lastest version). You can download it from terraform.io.
 
 >AWS CLI: Install and configure the AWS CLI. Make sure you have valid AWS credentials set up. Instructions can be found here.
 
