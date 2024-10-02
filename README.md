@@ -3,6 +3,8 @@ This project is a Terraform-based infrastructure deployment for various cloud re
 
 [![Terraform Deployment](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-terraform.yml/badge.svg)](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-terraform.yml)
 
+[![Deploy to AWS](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-aws.yml/badge.svg)](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-aws.yml)
+
 (SCREENSHOTS ARE BELLOW)
 
 \\\Getting Started\\\
