@@ -21,6 +21,9 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.3.0  
+          
+      - name: Terraform init
+        run: terraform init
 
       - name: Terraform format check
         run: terraform fmt -check
