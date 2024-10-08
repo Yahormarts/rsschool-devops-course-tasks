@@ -26,7 +26,7 @@ jobs:
         run: terraform init
         
       - name: Terraform refresh
-        run: terraform refresh
+        run: terraform refresh -lock=false
 
       - name: Terraform format
         run: terraform fmt
@@ -81,7 +81,7 @@ jobs:
         run: terraform init
 
       - name: Terraform apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -lock=false
 
       - name: Show Terraform Outputs
         run: terraform output
