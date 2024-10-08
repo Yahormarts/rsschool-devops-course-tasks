@@ -24,9 +24,6 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-        
-      - name: Terraform refresh
-        run: terraform refresh -lock=false
 
       - name: Terraform format
         run: terraform fmt
@@ -58,7 +55,7 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan -lock=false
+        run: terraform plan
 
   terraform-apply:
     runs-on: ubuntu-latest
@@ -81,11 +78,14 @@ jobs:
         run: terraform init
 
       - name: Terraform apply
-        run: terraform apply -auto-approve -lock=false
+        run: terraform apply -auto-approve
 
       - name: Show Terraform Outputs
         run: terraform output
 
+      - name: Create terraform directory
+        run: mkdir -p ./terraform
+        
       - name: Generate Terraform Graph
         run: terraform graph
 
