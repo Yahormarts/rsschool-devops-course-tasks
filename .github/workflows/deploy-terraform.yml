@@ -82,13 +82,3 @@ jobs:
 
       - name: Show Terraform Outputs
         run: terraform output
-
-      - name: Create terraform directory
-        run: mkdir -p ./terraform
-
-      - name: Generate Terraform Graph
-        run: terraform graph > ./terraform/graph.dot
-
-      - name: Output Terraform Graph
-        run: cat ./terraform/graph.dot
-
