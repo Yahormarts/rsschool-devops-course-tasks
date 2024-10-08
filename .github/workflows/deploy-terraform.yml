@@ -58,13 +58,10 @@ jobs:
         run: terraform plan
 
       - name: Generate Terraform Graph
-        run: terraform graph > graph.dot
+        run: terraform graph
 
-      - name: Upload Terraform Graph
-        uses: actions/upload-artifact@v3
-        with:
-         name: terraform-graph
-         path: graph.dot
+      - name: Output Terraform Graph
+        run: cat graph.dot
           
   terraform-apply:
     runs-on: ubuntu-latest
@@ -89,15 +86,8 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve
 
-      - name: Terraform output after apply
-        id: outputs
-        run: terraform output -json > outputs.json
-
-      - name: Upload outputs.json
-        uses: actions/upload-artifact@v2
-        with:
-          name: terraform-outputs
-          path: outputs.json
+      - name: Show Terraform Outputs
+        run: terraform output
 
       - name: Terraform destroy
         run: terraform destroy -auto-approve
