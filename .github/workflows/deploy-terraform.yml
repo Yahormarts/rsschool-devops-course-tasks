@@ -58,7 +58,7 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan
+        run: terraform plan -lock=false
 
   terraform-apply:
     runs-on: ubuntu-latest
