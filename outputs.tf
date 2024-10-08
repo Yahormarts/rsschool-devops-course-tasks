@@ -24,13 +24,13 @@ output "private_subnet_2_id" {
 }
 
 output "internet_gateway_id" {
-  value       = aws_internet_gateway.main_igw.id
-  description = "ID of the created Internet Gateway"
+  description = "ID of the Internet Gateway"
+  value       = aws_internet_gateway.igw.id
 }
 
 output "nat_gateway_id" {
-  value       = aws_nat_gateway.nat_gateway.id
-  description = "ID of the created NAT Gateway"
+  description = "ID of the NAT Gateway"
+  value       = aws_nat_gateway.nat_gw.id
 }
 
 output "public_route_table_id" {
