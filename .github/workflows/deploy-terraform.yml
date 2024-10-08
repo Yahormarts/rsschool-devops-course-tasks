@@ -54,6 +54,20 @@ jobs:
       - name: Terraform plan
         run: terraform plan
 
+      - name: Install Graphviz
+        run: sudo apt-get install graphviz
+
+      - name: Terraform graph
+        run: |
+          terraform graph > graph.dot
+          dot -Tpng graph.dot -o graph.png
+
+      - name: Upload graph
+        uses: actions/upload-artifact@v2
+        with:
+          name: graph
+          path: graph.png
+          
   terraform-apply:
     runs-on: ubuntu-latest
     needs: terraform-plan
@@ -81,10 +95,11 @@ jobs:
         id: outputs
         run: terraform output -json > outputs.json
 
-      - name: Generate resource graph
-        run: |
-          terraform graph > graph.dot
-          dot -Tpng graph.dot -o graph.png
+      - name: Upload outputs.json
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform-outputs
+          path: outputs.json
 
       - name: Terraform destroy
         run: terraform destroy -auto-approve
