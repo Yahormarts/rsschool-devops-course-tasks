@@ -87,7 +87,12 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Show Terraform Outputs
-        run: terraform output
+        run: terraform output -json > outputs.json
+
+      - name: Read Terraform Outputs
+        id: outputs
+        run: |
+          echo "Outputs: $(cat outputs.json)" >> $GITHUB_ENV
 
       - name: Terraform destroy
         run: terraform destroy -auto-approve
