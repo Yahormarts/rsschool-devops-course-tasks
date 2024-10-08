@@ -58,11 +58,11 @@ jobs:
         run: terraform plan
 
       - name: Generate Terraform Graph
-        run: terraform graph
+        run: terraform graph > ./terraform/graph.dot
 
       - name: Output Terraform Graph
-        run: cat graph.dot
-          
+        run: cat ./terraform/graph.dot
+
   terraform-apply:
     runs-on: ubuntu-latest
     needs: terraform-plan
