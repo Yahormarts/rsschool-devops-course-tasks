@@ -85,10 +85,10 @@ jobs:
 
       - name: Create terraform directory
         run: mkdir -p ./terraform
-        
+
       - name: Generate Terraform Graph
-        run: terraform graph
+        run: terraform graph > ./terraform/graph.dot
 
       - name: Output Terraform Graph
-        run: cat graph.dot
+        run: cat ./terraform/graph.dot
 
