@@ -63,7 +63,7 @@ jobs:
           dot -Tpng graph.dot -o graph.png
 
       - name: Upload graph
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: graph
           path: graph.png
