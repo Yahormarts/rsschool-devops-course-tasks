@@ -27,6 +27,9 @@ jobs:
 
       - name: Terraform format
         run: terraform fmt
+        
+      - name: Terraform format check
+        run: terraform fmt -check
 
       - name: Terraform validate
         run: terraform validate
@@ -58,14 +61,15 @@ jobs:
         run: sudo apt-get install graphviz
 
       - name: Terraform graph
-        run: |
-          terraform graph > graph.dot
-          dot -Tpng graph.dot -o graph.png
+        run: terraform graph > graph.dot
 
-      - name: Upload graph
+      - name: Convert graph.dot to PNG
+        run: dot -Tpng graph.dot -o graph.png
+
+      - name: Upload graph image
         uses: actions/upload-artifact@v3
         with:
-          name: graph
+          name: terraform-graph
           path: graph.png
           
   terraform-apply:
