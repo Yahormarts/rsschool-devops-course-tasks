@@ -23,9 +23,6 @@ jobs:
           terraform_version: 1.3.0
 
       - name: Terraform init
-        run: terraform force-unlock d6d2b54a-ee3e-b625-437f-d0ecb39c1e56
-
-      - name: Terraform init
         run: terraform init
         
       - name: Terraform refresh
