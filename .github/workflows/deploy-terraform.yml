@@ -76,3 +76,15 @@ jobs:
 
       - name: Terraform apply
         run: terraform apply -auto-approve
+
+      - name: Terraform output after apply
+        id: outputs
+        run: terraform output -json > outputs.json
+
+      - name: Generate resource graph
+        run: |
+          terraform graph > graph.dot
+          dot -Tpng graph.dot -o graph.png
+
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve
