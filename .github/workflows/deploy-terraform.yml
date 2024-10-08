@@ -57,20 +57,14 @@ jobs:
       - name: Terraform plan
         run: terraform plan
 
-      - name: Install Graphviz
-        run: sudo apt-get install graphviz
-
-      - name: Terraform graph
+      - name: Generate Terraform Graph
         run: terraform graph > graph.dot
 
-      - name: Convert graph.dot to PNG
-        run: dot -Tpng graph.dot -o graph.png
-
-      - name: Upload graph image
+      - name: Upload Terraform Graph
         uses: actions/upload-artifact@v3
         with:
-          name: terraform-graph
-          path: graph.png
+         name: terraform-graph
+         path: graph.dot
           
   terraform-apply:
     runs-on: ubuntu-latest
