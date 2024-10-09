@@ -55,7 +55,8 @@ jobs:
         run: terraform init
         
       - name: Force unlock state
-        run: echo "yes" | terraform force-unlock d6d2b54a-ee3e-b625-437f-d0ecb39c1e56
+        run: |
+          terraform force-unlock -force d6d2b54a-ee3e-b625-437f-d0ecb39c1e56
 
       - name: Terraform plan
         run: terraform plan 
