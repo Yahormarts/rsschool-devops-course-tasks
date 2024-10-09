@@ -57,6 +57,14 @@ jobs:
       - name: Terraform plan
         run: terraform plan 
 
+      - name: Save Terraform Plan
+        run: terraform plan -out=tfplan
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan
+
   terraform-apply:
     runs-on: ubuntu-latest
     needs: terraform-plan
