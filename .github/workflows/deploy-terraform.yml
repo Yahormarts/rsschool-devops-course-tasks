@@ -30,7 +30,7 @@ jobs:
         
       - name: Terraform format check
         run: terraform fmt -check
-
+          
       - name: Terraform validate
         run: terraform validate
 
@@ -53,6 +53,9 @@ jobs:
 
       - name: Terraform init
         run: terraform init
+        
+      - name: Force unlock state
+        run: terraform force-unlock d6d2b54a-ee3e-b625-437f-d0ecb39c1e56
 
       - name: Terraform plan
         run: terraform plan 
