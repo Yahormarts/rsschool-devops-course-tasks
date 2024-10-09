@@ -38,7 +38,30 @@ The following variables can be customized in variables.tf:
 
 2) bucket_name: The name of the S3 bucket used for storing the Terraform state (default: my-bucket-task-rs).
 
-### Usage
+## Terraform Configuration Files
+
+ `backend.tf`
+This file configures the backend for managing Terraform's state. It specifies remote storage options, allowing for safe collaboration among team members. The configuration may include settings for state locking, ensuring that multiple users cannot make changes simultaneously. This is essential for maintaining the integrity of the infrastructure state.
+
+ `main.tf`
+The main configuration file that defines the core infrastructure components, including AWS resources such as EC2 instances and S3 buckets.
+
+ `gateway.tf`
+This file defines the configuration for the gateway resource used in our infrastructure. It includes specifications for the type of gateway (such as API Gateway or VPC Gateway), along with necessary parameters and integrations with other resources. The gateway's permissions and policies are also outlined here, ensuring secure access to related services. This is critical for enabling connectivity and managing traffic within our architecture.
+
+ `routes.tf`
+This file configures the routing rules for our infrastructure, defining how incoming requests are processed and directed to various backend services. It includes specific route definitions, integrations with other resources, and security measures to control access. Additionally, fallback routes are specified to ensure robust error handling and a smooth user experience. This configuration is vital for managing traffic flow and optimizing resource utilization within our architecture.
+
+ `subnets.tf`
+This file defines the subnet configurations for our cloud infrastructure, specifying individual subnets with their respective CIDR blocks, availability zones, and association with the Virtual Private Cloud (VPC). It distinguishes between public and private subnets to enhance security by controlling internet access for sensitive resources. Additionally, route table associations are defined to manage traffic flow between subnets and other networks. This configuration is fundamental for structuring our network architecture effectively.
+
+ `variables.tf`
+Declares variables used throughout the Terraform configurations, allowing for more flexible and maintainable code.
+
+ `outputs.tf`
+Specifies outputs from the Terraform configuration, providing important information such as resource IDs and IP addresses after deployment.
+
+# Usage
 
 To deploy the infrastructure, follow these steps:
 
@@ -103,11 +126,4 @@ Contributions are welcome! Please follow these steps:
 
 ![02_Github_Action_Role](https://github.com/user-attachments/assets/0e34c7dd-abb5-4e74-a9d9-67bd10917ade)
 
->Successful completed teraform deployment jobs:
-
-![IMG_20241001_133200_377](https://github.com/user-attachments/assets/10f3ab5d-8bab-48f0-a19b-a44e18382b44)
-
->Successful completed AWS deployment job:
-
-![IMG_20241001_133716](https://github.com/user-attachments/assets/78165bb3-6cc0-41ea-b530-dbf001e166fc)
 
