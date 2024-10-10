@@ -61,6 +61,11 @@ Declares variables used throughout the Terraform configurations, allowing for mo
  `outputs.tf`
 Specifies outputs from the Terraform configuration, providing important information such as resource IDs and IP addresses after deployment.
 
+>An example of output in during the execution of the action:
+![outputs](https://github.com/user-attachments/assets/b2971d14-243a-4051-bd32-3065df61e915)
+
+This allows you to make sure that everything works correctly and the infrastructure is actually created according to the configurations.
+
 # Usage
 
 To deploy the infrastructure, follow these steps:
@@ -115,15 +120,14 @@ Contributions are welcome! Please follow these steps:
 ## SCREENSHOTS
 
 >IAM User created:
-
 ![01_User_MFA](https://github.com/user-attachments/assets/e123704d-210d-4563-bdb6-d80c8053d288)
 
 >S3 Bucket created:
-
 ![02_Terraform_States_Bucket](https://github.com/user-attachments/assets/0c244f6e-807f-4865-bc7a-0941a31b4323)
 
->GitHUB Actions Role created:
 
+>GitHUB Actions Role created:
 ![02_Github_Action_Role](https://github.com/user-attachments/assets/0e34c7dd-abb5-4e74-a9d9-67bd10917ade)
 
-
+>Infrastructure's Resourse map: 
+![resource map](https://github.com/user-attachments/assets/8cf25788-b7bc-483c-9f9f-2ea9548b2218)
