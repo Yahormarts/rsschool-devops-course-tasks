@@ -1,5 +1,5 @@
 resource "aws_instance" "k3s_master" {
-  ami           = "ami-005fc0f236362e99f"  # AMI for Ubuntu 
+  ami           = "ami-089146c5626baa6bf"  # AMI for Ubuntu 
   instance_type = "t2.micro"      # Free tier
   subnet_id     = aws_subnet.public_subnet_1.id
 
@@ -17,7 +17,7 @@ resource "aws_instance" "k3s_master" {
 
 resource "aws_instance" "k3s_worker" {
   count         = 2 
-  ami           = "ami-005fc0f236362e99f"
+  ami           = "ami-089146c5626baa6bf"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet_1.id
 
