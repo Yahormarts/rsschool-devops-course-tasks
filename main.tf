@@ -25,3 +25,4 @@ resource "aws_network_acl" "main_acl" {
     rule_no     = 100
     rule_action = "allow"
   }
+}
