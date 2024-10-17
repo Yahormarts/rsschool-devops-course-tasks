@@ -6,6 +6,8 @@ resource "aws_subnet" "public_subnet_1" {
   tags = {
     Name = "public_subnet_1"
   }
+
+  network_acl_id = aws_network_acl.main_acl.id
 }
 
 resource "aws_subnet" "public_subnet_2" {
@@ -16,6 +18,8 @@ resource "aws_subnet" "public_subnet_2" {
   tags = {
     Name = "public_subnet_2"
   }
+
+  network_acl_id = aws_network_acl.main_acl.id
 }
 
 resource "aws_subnet" "private_subnet_1" {
@@ -25,6 +29,8 @@ resource "aws_subnet" "private_subnet_1" {
   tags = {
     Name = "private_subnet_1"
   }
+
+  network_acl_id = aws_network_acl.main_acl.id
 }
 
 resource "aws_subnet" "private_subnet_2" {
@@ -34,4 +40,6 @@ resource "aws_subnet" "private_subnet_2" {
   tags = {
     Name = "private_subnet_2"
   }
+
+  network_acl_id = aws_network_acl.main_acl.id
 }
