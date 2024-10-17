@@ -17,6 +17,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Check SSH key exists
+        run: ls -la ~/.ssh/
+          
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -46,6 +55,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
