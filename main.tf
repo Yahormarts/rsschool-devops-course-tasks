@@ -6,3 +6,22 @@ resource "aws_vpc" "main_vpc" {
     Name = "main_vpc"
   }
 }
+
+resource "aws_network_acl" "main_acl" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"  # All traffic
+    rule_no     = 100
+    rule_action = "allow"
+  }
+
+  ingress {
+    from_port   = 22         # SSH
+    to_port     = 22
+    protocol    = "tcp"
+    rule_no     = 100
+    rule_action = "allow"
+  }
