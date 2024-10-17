@@ -15,7 +15,7 @@ resource "aws_network_acl" "main_acl" {
     to_port     = 0
     protocol    = "-1"  # All traffic
     rule_no     = 100
-    rule_action = "allow"
+    action = "allow"
   }
 
   ingress {
@@ -23,6 +23,6 @@ resource "aws_network_acl" "main_acl" {
     to_port     = 22
     protocol    = "tcp"
     rule_no     = 100
-    rule_action = "allow"
+    action = "allow"
   }
 }
