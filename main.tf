@@ -9,6 +9,7 @@ resource "aws_vpc" "main_vpc" {
 
 resource "aws_network_acl" "main_acl" {
   vpc_id = aws_vpc.main_vpc.id
+  cidr_block = "10.0.0.0/16"
 
   egress {
     from_port   = 0
