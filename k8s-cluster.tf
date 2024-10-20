@@ -1,3 +1,14 @@
+resource "aws_instance" "bastion" {
+  ami           = "ami-089146c5626baa6bf"  
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public_subnet_1.id
+  key_name      = "deploy_key"
+  
+  tags = {
+    Name = "bastion"
+  }
+}
+
 resource "aws_instance" "k3s_master" {
   ami           = "ami-089146c5626baa6bf" 
   instance_type = "t3.micro"
