@@ -18,18 +18,18 @@ resource "aws_instance" "k3s_master" {
 
   provisioner "remote-exec" {
     inline = [
-      "set -x",
-      "sleep 10",
-      "echo 'Checking internet connectivity'",
-      "curl -I https://www.google.com || echo 'No internet connectivity'",
-      "echo 'Starting K3s installation'",
-      "sleep 60",
-      "curl -sfL https://get.k3s.io | sh -",
-      "echo 'K3s installed'",
-      "sleep 60",
-      "k3s check-config",
-      "cat /var/lib/rancher/k3s/server/node-token > /tmp/k3s_token"
-      "echo 'K3s installation complete'",
+    "set -x",
+    "sleep 10",
+    "echo 'Checking internet connectivity'",
+    "curl -I https://www.google.com || echo 'No internet connectivity'",
+    "echo 'Starting K3s installation'",
+    "sleep 60",
+    "curl -sfL https://get.k3s.io | sh -",
+    "echo 'K3s installed'",
+    "sleep 60",
+    "k3s check-config || { echo 'K3s configuration check failed'; exit 1; }",  # Исправлено
+    "cat /var/lib/rancher/k3s/server/node-token > /tmp/k3s_token",
+    "echo 'K3s installation complete'",
     ]
   }
 }
