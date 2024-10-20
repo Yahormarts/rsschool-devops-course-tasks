@@ -68,7 +68,7 @@ resource "aws_security_group" "k3s_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {  # Правильное размещение тегов
+  tags = {
     Name = "allow_ssh"
   }
 }
