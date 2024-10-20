@@ -72,13 +72,6 @@ resource "aws_security_group" "k3s_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
- ingress {
-    from_port   = 6443
-    to_port     = 6443
-    protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main_vpc.cidr_block]
-  }
-
   tags = {
     Name = "k3s_sg"
   }
