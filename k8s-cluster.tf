@@ -19,7 +19,7 @@ resource "aws_instance" "k3s_master" {
   provisioner "remote-exec" {
     inline = [
     "set -x",
-    "sleep 10",
+    "sleep 60",
     "echo 'Checking internet connectivity'",
     "curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }",
     "echo 'Starting K3s installation'",
