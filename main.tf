@@ -69,6 +69,6 @@ resource "aws_security_group" "k3s_sg" {
   }
 
   tags = {
-    Name = "allow_ssh"
+    Name = "k3s_sg"
   }
 }
