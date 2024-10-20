@@ -1,11 +1,7 @@
-name: Terraform Cleanup
+name: Terraform Destroy
 
 on:
-  pull_request:
-    types: [closed] 
-  delete:
-    branches:
-      - main 
+  workflow_dispatch: 
 
 jobs:
   terraform-destroy:
@@ -35,3 +31,6 @@ jobs:
 
       - name: Terraform destroy
         run: terraform destroy -auto-approve
+
+      - name: Show Terraform Outputs
+        run: terraform output
