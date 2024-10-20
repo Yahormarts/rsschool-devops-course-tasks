@@ -14,33 +14,37 @@ resource "aws_network_acl" "main_acl" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"  # All traffic
+    protocol    = "-1"  
     rule_no     = 100
     action      = "allow"
+    cidr_block  = "0.0.0.0/0"
   }
 
   ingress {
-    from_port   = 22         # SSH
+    from_port   = 22        
     to_port     = 22
     protocol    = "tcp"
     rule_no     = 100
     action      = "allow"
+    cidr_block  = "0.0.0.0/0"
   }
 
   ingress {
-    from_port   = 80         # HTTP
+    from_port   = 80         
     to_port     = 80
     protocol    = "tcp"
     rule_no     = 101
     action      = "allow"
+    cidr_block  = "0.0.0.0/0"
   }
 
   ingress {
-    from_port   = 443        # HTTPS
+    from_port   = 443       
     to_port     = 443
     protocol    = "tcp"
     rule_no     = 102
     action      = "allow"
+    cidr_block  = "0.0.0.0/0"
   }
 }
 
@@ -51,7 +55,7 @@ resource "aws_security_group" "k3s_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # или укажите ваш IP
+    cidr_blocks = ["0.0.0.0/0"]  
   }
 
   ingress {
