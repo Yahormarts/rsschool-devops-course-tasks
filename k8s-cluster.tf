@@ -18,7 +18,10 @@ resource "aws_instance" "k3s_master" {
 
   provisioner "remote-exec" {
     inline = [
+      "sleep 60",
       "curl -sfL https://get.k3s.io | sh -",
+      "sleep 60",
+      "k3s check-config",
       "cat /var/lib/rancher/k3s/server/node-token > /tmp/k3s_token"
     ]
   }
@@ -45,6 +48,7 @@ resource "aws_instance" "k3s_worker" {
 
   provisioner "remote-exec" {
     inline = [
+      "sleep 60",
       "K3S_TOKEN=$(curl -s ${aws_instance.k3s_master.public_ip}/tmp/k3s_token) curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.k3s_master.private_ip}:6443 K3S_TOKEN=$K3S_TOKEN sh -"
     ]
   }
