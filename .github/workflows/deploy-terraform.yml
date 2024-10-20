@@ -69,18 +69,18 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      - name: Terraform plan
+      - name: Terraform Plan
         run: |
-          terraform plan -var="aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}"
+          terraform plan -out=tfplan -var="aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}" -input=false
 
       - name: Save Terraform Plan
-        run: terraform plan -out=tfplan
-        
+        run: terraform show -json tfplan > tfplan.json
+
       - name: Upload Terraform Plan
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: tfplan
+          path: tfplan.json
 
   terraform-apply:
     runs-on: ubuntu-latest
