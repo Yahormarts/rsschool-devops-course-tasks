@@ -70,10 +70,12 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan 
+        run: |
+          terraform plan -var="aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}"
 
       - name: Save Terraform Plan
         run: terraform plan -out=tfplan
+        
       - name: Upload Terraform Plan
         uses: actions/upload-artifact@v3
         with:
@@ -107,7 +109,8 @@ jobs:
         run: terraform init
 
       - name: Terraform apply
-        run: terraform apply -auto-approve 
+        run: |
+          terraform apply -auto-approve -var="aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}"
 
       - name: Show Terraform Outputs
         run: terraform output
