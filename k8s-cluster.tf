@@ -1,6 +1,6 @@
 resource "aws_instance" "bastion" {
   ami           = "ami-089146c5626baa6bf"  
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
   subnet_id     = aws_subnet.public_subnet_1.id
   key_name      = "deploy_key"
   
@@ -23,8 +23,9 @@ resource "aws_instance" "k3s_master" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
+    bastion_host = aws_instance.bastion.public_ip
     private_key = var.aws_private_key
-    host        = self.public_ip
+    host        = aws_instance.k3s_master.private_ip
   }
 
   provisioner "remote-exec" {
