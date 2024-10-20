@@ -2,6 +2,7 @@ resource "aws_vpc" "main_vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
     Name = "main_vpc"
   }
@@ -66,10 +67,8 @@ resource "aws_security_group" "k3s_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
 
-
-  tags = {
+  tags = {  # Правильное размещение тегов
     Name = "allow_ssh"
   }
 }
