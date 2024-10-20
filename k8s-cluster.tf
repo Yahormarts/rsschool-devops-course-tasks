@@ -3,7 +3,7 @@ resource "aws_instance" "k3s_master" {
   instance_type = "t3.micro"
   subnet_id     = aws_subnet.public_subnet_1.id
   key_name      = "deploy_key"
-  security_groups = [aws_security_group.k3s_sg.name]
+  vpc_security_group_ids = [aws_security_group.k3s_sg.id]
 
   tags = {
     Name = "k3s-master"
@@ -30,7 +30,7 @@ resource "aws_instance" "k3s_worker" {
   instance_type = "t3.micro"
   subnet_id     = aws_subnet.private_subnet_1.id
   key_name      = "deploy_key"
-  security_groups = [aws_security_group.k3s_sg.name]
+  vpc_security_group_ids = [aws_security_group.k3s_sg.id]
 
   tags = {
     Name = "k3s-worker-${count.index}"
