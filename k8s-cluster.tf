@@ -1,5 +1,5 @@
 resource "aws_instance" "bastion" {
-  ami                         = "ami-089146c5626baa6bf"  
+  ami                         = "ami-070fe338fb2265e00"  
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_subnet_1.id
   associate_public_ip_address = true 
@@ -12,7 +12,7 @@ resource "aws_instance" "bastion" {
 }
 
 resource "aws_instance" "k3s_master" {
-  ami                         = "ami-089146c5626baa6bf" 
+  ami                         = "ami-070fe338fb2265e00" 
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_subnet_1.id
   key_name                    = "deploy_key"
@@ -53,7 +53,7 @@ resource "aws_instance" "k3s_master" {
 
 resource "aws_instance" "k3s_worker" {
   count                       = 2
-  ami                         = "ami-089146c5626baa6bf"
+  ami                         = "ami-070fe338fb2265e00"
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_subnet_1.id
   key_name                    = "deploy_key"
