@@ -54,11 +54,12 @@ jobs:
       - name: Terraform init
         run: terraform init
 
+      - name: Debug AWS_PRIVATE_KEY
+        run: echo "AWS_PRIVATE_KEY length: ${#{{ secrets.AWS_PRIVATE_KEY }}}"
+
       - name: Create Terraform variable file
         run: |
-          echo "aws_private_key=""" > terraform.tfvars
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" >> terraform.tfvars
-          echo """" >> terraform.tfvars
+          echo 'aws_private_key="${{ secrets.AWS_PRIVATE_KEY }}"' > terraform.tfvars
 
       - name: Terraform Plan
         run: terraform plan -var-file="terraform.tfvars" -out=tfplan -input=false
@@ -97,9 +98,7 @@ jobs:
 
       - name: Create Terraform variable file
         run: |
-          echo "aws_private_key=""" > terraform.tfvars
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" >> terraform.tfvars
-          echo """" >> terraform.tfvars
+          echo 'aws_private_key="${{ secrets.AWS_PRIVATE_KEY }}"' > terraform.tfvars
 
       - name: Terraform Apply
         run: terraform apply -var-file="terraform.tfvars" -auto-approve  
