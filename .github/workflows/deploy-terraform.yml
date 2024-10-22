@@ -92,8 +92,8 @@ jobs:
 
       - name: Start SSH Agent
         run: |
-          eval $(ssh-agent -s)
-          printf "%b" "${{ secrets.AWS_PRIVATE_KEY }}" | ssh-add -
+           eval $(ssh-agent -s)              
+           printf "%b" "${{ secrets.AWS_PRIVATE_KEY }}" | tr -d '\r' | ssh-add 
 
       - name: Terraform init
         run: terraform init
