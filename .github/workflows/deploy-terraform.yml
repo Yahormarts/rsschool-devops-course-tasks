@@ -29,6 +29,7 @@ jobs:
 
       - name: Terraform Plan
         run: |
+          export TF_VAR_aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}
           terraform plan -out=tfplan -input=false
 
       - name: Terraform Apply
