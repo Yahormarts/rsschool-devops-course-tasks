@@ -27,7 +27,7 @@ resource "aws_instance" "k3s_master" {
     user        = "ec2-user"
     bastion_host = aws_instance.bastion.public_ip
     private_key = <<-EOF
-    #{var.aws_private_key}
+    ${var.aws_private_key}
     EOF
     host        = self.private_ip 
   }
