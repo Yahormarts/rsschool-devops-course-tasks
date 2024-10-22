@@ -90,10 +90,10 @@ jobs:
         with:
           terraform_version: 1.3.0
 
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-         ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
+      - name: Start SSH Agent
+        run: |
+          eval $(ssh-agent -s)
+          printf "%b" "${{ secrets.AWS_PRIVATE_KEY }}" | ssh-add -
 
       - name: Terraform init
         run: terraform init
