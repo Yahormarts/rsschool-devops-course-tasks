@@ -26,12 +26,15 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      - name: Create Terraform variable file
+      - name: Save private key to file
         run: |
-          echo 'aws_private_key="${{ secrets.AWS_PRIVATE_KEY }}"' > terraform.tfvars
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: Terraform Plan
-        run: terraform plan -var-file="terraform.tfvars" -out=tfplan -input=false
+        run: |
+          export TF_VAR_aws_private_key=$(cat ~/.ssh/id_rsa)
+          terraform plan -out=tfplan -input=false
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
