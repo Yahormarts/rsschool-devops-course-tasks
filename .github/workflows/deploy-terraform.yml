@@ -37,8 +37,16 @@ jobs:
           export TF_VAR_aws_private_key=$(cat ~/.ssh/id_rsa)
           terraform plan -out=tfplan -input=false
 
+      - name: Create SSH directory and save private key to file
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: |
+          export TF_VAR_aws_private_key=$(cat ~/.ssh/id_rsa)
+          terraform apply -auto-approve
 
       - name: Save Infrastructure Outputs
         run: terraform output -json > infra_outputs.json
