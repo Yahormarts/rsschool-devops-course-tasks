@@ -52,12 +52,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Add SSH key
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -66,9 +60,12 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      - name: Terraform Plan
+      - name: Create Terraform variable file
         run: |
-          terraform plan -out=tfplan -var="aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}" -input=false
+          echo "aws_private_key=\"${{ secrets.AWS_PRIVATE_KEY }}\"" > terraform.tfvars
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="terraform.tfvars" -out=tfplan -input=false
 
       - name: Save Terraform Plan
         run: terraform show -json tfplan > tfplan.json
@@ -78,6 +75,9 @@ jobs:
         with:
           name: tfplan
           path: tfplan.json
+
+      - name: Clean up variable file
+        run: rm terraform.tfvars
 
   terraform-apply:
     runs-on: ubuntu-latest
@@ -96,18 +96,18 @@ jobs:
         with:
           terraform_version: 1.3.0
 
-      - name: Add SSH key
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
       - name: Terraform init
         run: terraform init
 
-      - name: Terraform apply
+      - name: Create Terraform variable file
         run: |
-          terraform apply -auto-approve -var="aws_private_key=${{ secrets.AWS_PRIVATE_KEY }}"
+          echo "aws_private_key=\"${{ secrets.AWS_PRIVATE_KEY }}\"" > terraform.tfvars  
+
+      - name: Terraform Apply
+        run: terraform apply -var-file="terraform.tfvars" -auto-approve  
 
       - name: Show Terraform Outputs
         run: terraform output
+
+      - name: Clean up variable file
+        run: rm terraform.tfvars
