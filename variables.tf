@@ -24,6 +24,6 @@ variable "private_subnet_2_cidr" {
 }
 
 variable "aws_private_key" {
-  description = "Private SSH key for connecting to EC2 instances"
-  type        = string
+  type    = string
+  default = var.AWS_PRIVATE_KEY
 }
