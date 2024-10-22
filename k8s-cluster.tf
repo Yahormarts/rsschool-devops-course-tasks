@@ -24,7 +24,7 @@ resource "aws_instance" "k3s_master" {
 
   connection {
     type        = "ssh"
-    user        = "ubuntu"
+    user        = "ec2-user"
     bastion_host = aws_instance.bastion.public_ip
     private_key = var.aws_private_key
     host        = self.private_ip 
@@ -65,7 +65,7 @@ resource "aws_instance" "k3s_worker" {
 
   connection {
     type        = "ssh"
-    user        = "ubuntu"
+    user        = "ec2-user"
     bastion_host = aws_instance.bastion.public_ip
     private_key = var.aws_private_key
     host        = self.private_ip 
