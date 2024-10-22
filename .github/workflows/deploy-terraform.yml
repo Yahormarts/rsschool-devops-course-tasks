@@ -26,8 +26,9 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      - name: Save private key to file
+      - name: Create SSH directory and save private key to file
         run: |
+          mkdir -p ~/.ssh/
           echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
