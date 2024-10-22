@@ -54,9 +54,6 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      - name: Debug AWS_PRIVATE_KEY
-        run: echo "AWS_PRIVATE_KEY length: ${#{{ secrets.AWS_PRIVATE_KEY }}}"
-
       - name: Create Terraform variable file
         run: |
           echo 'aws_private_key="${{ secrets.AWS_PRIVATE_KEY }}"' > terraform.tfvars
