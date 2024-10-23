@@ -56,7 +56,7 @@ jobs:
 
       - name: Create Terraform variable file
         run: |
-          echo 'aws_private_key = <<EOF' > terraform.tfvars
+          echo 'aws_private_key = <<-EOF' > terraform.tfvars
           echo "${{ secrets.AWS_PRIVATE_KEY }}" >> terraform.tfvars
           echo 'EOF' >> terraform.tfvars
 
@@ -97,7 +97,7 @@ jobs:
 
       - name: Create Terraform variable file
         run: |
-          echo 'aws_private_key = <<EOF' > terraform.tfvars
+          echo 'aws_private_key = <<-EOF' > terraform.tfvars
           echo "${{ secrets.AWS_PRIVATE_KEY }}" >> terraform.tfvars
           echo 'EOF' >> terraform.tfvars
 
