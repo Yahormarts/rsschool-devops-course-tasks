@@ -24,7 +24,7 @@ resource "aws_instance" "k3s_master" {
 
   connection {
     type        = "ssh"
-    user        = "ec2-user"
+    user        = "root"
     bastion_host = aws_instance.bastion.public_ip
     agent       = false
     private_key = var.aws_private_key
