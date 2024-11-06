@@ -56,7 +56,7 @@ resource "aws_instance" "k3s_master" {
 
 resource "aws_instance" "k3s_worker" {
   depends_on = [aws_instance.k3s_master]
-  count                       = 2
+  count                       = 1
   ami                         = "ami-070fe338fb2265e00"
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_subnet_1.id
