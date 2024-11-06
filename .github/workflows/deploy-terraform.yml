@@ -99,6 +99,11 @@ jobs:
           echo "${{ secrets.AWS_PRIVATE_KEY }}" >> terraform.tfvars
           echo 'EOF' >> terraform.tfvars
 
+      - name: Start SSH Agent and Add Key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
+
       - name: Terraform Apply
         run: terraform apply -var-file="terraform.tfvars" -auto-approve  
 
