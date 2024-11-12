@@ -1,4 +1,3 @@
-# Creating Bastion
 resource "aws_instance" "bastion" {
   ami                         = "ami-070fe338fb2265e00"  
   instance_type               = "t3.micro"
@@ -12,24 +11,9 @@ resource "aws_instance" "bastion" {
   }
 }
 
-# Check connectivity Bastion with SSH
-resource "null_resource" "bastion_ready" {
-  depends_on = [aws_instance.bastion]
-
-  provisioner "remote-exec" {
-    inline = [
-      "echo 'Waiting for Bastion to be ready...'",
-      "until nc -zv ${aws_instance.bastion.public_ip} 22; do echo 'Waiting for SSH on Bastion...'; sleep 10; done",
-      "echo 'Bastion is now ready for SSH.'"
-    ]
-  }
-}
-
-# Creating K3s master, depends on Bastion ready
 resource "aws_instance" "k3s_master" {
-  depends_on = [null_resource.bastion_ready]  # guaranting that its started after bastion
-
-  ami                         = "ami-070fe338fb2265e00"
+  depends_on = [aws_instance.bastion]
+  ami                         = "ami-070fe338fb2265e00" 
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_subnet_1.id
   key_name                    = "deploy_key"
@@ -46,20 +30,23 @@ resource "aws_instance" "k3s_master" {
     agent       = false
     private_key = var.aws_private_key
     host        = self.public_ip
-    timeout     = "2m"
+    timeout = "2m"
   }
 
   provisioner "remote-exec" {
     inline = [
       "set -x",
+      "sleep 60",
       "echo 'Checking internet connectivity'",
       "curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }",
       "echo 'Starting K3s installation'",
+      "sleep 60",
       "curl -sfL https://get.k3s.io | sh - || { echo 'K3s installation failed'; exit 1; }",
       "echo 'K3s installed'",
-      "sleep 30",
+      "sleep 60",
       "echo 'Checking K3s installation'",
       "/usr/local/bin/k3s --version || { echo 'K3s not found'; exit 1; }",
+      "sleep 120", 
       "/usr/local/bin/k3s check-config || { echo 'K3s configuration check failed'; exit 1; }",
       "cat /var/lib/rancher/k3s/server/node-token > /tmp/k3s_token",
       "echo 'K3s installation complete'"
