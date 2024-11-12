@@ -11,14 +11,12 @@ resource "aws_instance" "k3s_worker" {
     Name = "k3s-worker-${count.index}"
   }
 
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      bastion_host = aws_instance.bastion.public_ip
-      agent       = false
-      private_key = var.aws_private_key
-      host        = self.private_ip
-      timeout     = "1m"
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"
+    bastion_host = aws_instance.bastion.public_ip
+    private_key = var.aws_private_key
+    host        = self.private_ip 
     }
 
   provisioner "remote-exec" {
