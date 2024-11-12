@@ -25,7 +25,7 @@ resource "aws_instance" "k3s_worker" {
   inline = [
     "sleep 60",
     "echo 'Connecting to master and retrieving token'",
-    "K3S_TOKEN=$(curl -s http://${aws_instance.k3s_master.public_ip}/tmp/k3s_token)",
+    "K3S_TOKEN=$(curl -s http://${aws_instance.k3s_master.private_ip}/tmp/k3s_token)",
     "echo 'Installing K3s agent on worker'",
     "curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.k3s_master.private_ip}:6443 K3S_TOKEN=$K3S_TOKEN sh -"
    ]
