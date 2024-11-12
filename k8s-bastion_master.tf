@@ -1,8 +1,8 @@
 resource "aws_instance" "bastion" {
-  ami                         = "ami-070fe338fb2265e00"  
+  ami                         = "ami-070fe338fb2265e00"
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_subnet_1.id
-  associate_public_ip_address = true 
+  associate_public_ip_address = true
   key_name                    = "deploy_key"
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
 
@@ -17,15 +17,19 @@ resource "aws_instance" "bastion" {
 
 resource "null_resource" "bastion_ready" {
   depends_on = [aws_instance.bastion]
-  
-  provisioner "local-exec" {
-    command = "sleep 120"
+
+  provisioner "remote-exec" {
+    inline = [
+      "until nc -zv ${aws_instance.bastion.public_ip} 22; do sleep 10; done",
+      "echo 'Bastion is ready'"
+    ]
   }
 }
 
 resource "aws_instance" "k3s_master" {
-  depends_on = [aws_instance.bastion]
-  ami                         = "ami-070fe338fb2265e00" 
+  depends_on = [null_resource.bastion_ready]  # Подождать завершения null_resource
+
+  ami                         = "ami-070fe338fb2265e00"
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_subnet_1.id
   key_name                    = "deploy_key"
@@ -42,7 +46,7 @@ resource "aws_instance" "k3s_master" {
     agent       = false
     private_key = var.aws_private_key
     host        = self.public_ip
-    timeout = "2m"
+    timeout     = "2m"
   }
 
   provisioner "remote-exec" {
