@@ -9,6 +9,18 @@ resource "aws_instance" "bastion" {
   tags = {
     Name = "bastion"
   }
+
+  provisioner "local-exec" {
+    command = "sleep 60"
+  }
+}
+
+resource "null_resource" "bastion_ready" {
+  depends_on = [aws_instance.bastion]
+  
+  provisioner "local-exec" {
+    command = "sleep 120"
+  }
 }
 
 resource "aws_instance" "k3s_master" {
