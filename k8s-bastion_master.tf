@@ -1,33 +1,33 @@
+# Creating Bastion
 resource "aws_instance" "bastion" {
-  ami                         = "ami-070fe338fb2265e00"
+  ami                         = "ami-070fe338fb2265e00"  
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_subnet_1.id
-  associate_public_ip_address = true
+  associate_public_ip_address = true 
   key_name                    = "deploy_key"
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
 
   tags = {
     Name = "bastion"
   }
-
-  provisioner "local-exec" {
-    command = "sleep 60"
-  }
 }
 
+# Check connectivity Bastion with SSH
 resource "null_resource" "bastion_ready" {
   depends_on = [aws_instance.bastion]
 
   provisioner "remote-exec" {
     inline = [
-      "until nc -zv ${aws_instance.bastion.public_ip} 22; do sleep 10; done",
-      "echo 'Bastion is ready'"
+      "echo 'Waiting for Bastion to be ready...'",
+      "until nc -zv ${aws_instance.bastion.public_ip} 22; do echo 'Waiting for SSH on Bastion...'; sleep 10; done",
+      "echo 'Bastion is now ready for SSH.'"
     ]
   }
 }
 
+# Creating K3s master, depends on Bastion ready
 resource "aws_instance" "k3s_master" {
-  depends_on = [null_resource.bastion_ready]  # Подождать завершения null_resource
+  depends_on = [null_resource.bastion_ready]  # guaranting that its started after bastion
 
   ami                         = "ami-070fe338fb2265e00"
   instance_type               = "t3.micro"
