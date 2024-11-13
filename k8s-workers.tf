@@ -1,5 +1,5 @@
 resource "aws_instance" "k3s_worker" {
-  depends_on = [aws_instance.master]
+  depends_on = [aws_instance.k3s_master]
   count                       = 1
   ami                         = "ami-070fe338fb2265e00"
   instance_type               = "t3.micro"
