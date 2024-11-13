@@ -49,7 +49,12 @@ resource "null_resource" "bastion_ready" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo 'Waiting for Bastion to be ready...'"
+      "set -x",
+      "sleep 60",
+      "echo 'Checking internet connectivity'",
+      "curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }",
+      "echo 'Starting K3s installation'",
+      "sleep 60"
     ]
   }
 }
