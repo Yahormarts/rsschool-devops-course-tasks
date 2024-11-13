@@ -22,39 +22,4 @@ resource "aws_instance" "k3s_master" {
   tags = {
     Name = "k3s-master"
   }
-
-  connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    bastion_host = aws_instance.bastion.public_ip
-    agent       = false
-    private_key = var.aws_private_key
-    host        = self.private_ip
-    timeout = "2m"
-  }
-}
-
-resource "null_resource" "bastion_ready2" {
-  depends_on = [aws_instance.bastion]
-
-  connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    bastion_host = aws_instance.bastion.public_ip
-    agent       = false
-    private_key = var.aws_private_key
-    host        = aws_instance.bastion.private_ip
-    timeout = "2m"
-  }
-
-  provisioner "local-exec" {
-    command = <<EOT
-      set -x
-      sleep 60
-      echo 'Checking internet connectivity'
-      curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }
-      echo 'Starting K3s installation'
-      sleep 60
-    EOT
-  }
 }
