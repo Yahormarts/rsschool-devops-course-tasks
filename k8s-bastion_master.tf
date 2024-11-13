@@ -34,7 +34,7 @@ resource "aws_instance" "k3s_master" {
   }
 }
 
-resource "null_resource" "bastion_ready" {
+resource "null_resource" "bastion_ready2" {
   depends_on = [aws_instance.bastion]
 
   connection {
