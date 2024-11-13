@@ -47,14 +47,14 @@ resource "null_resource" "bastion_ready" {
     timeout = "2m"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "set -x",
-      "sleep 60",
-      "echo 'Checking internet connectivity'",
-      "curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }",
-      "echo 'Starting K3s installation'",
-      "sleep 60"
-    ]
+  provisioner "local-exec" {
+    command = <<EOT
+      set -x
+      sleep 60
+      echo 'Checking internet connectivity'
+      curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }
+      echo 'Starting K3s installation'
+      sleep 60
+    EOT
   }
 }
