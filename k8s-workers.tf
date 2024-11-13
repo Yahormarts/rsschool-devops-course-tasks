@@ -18,11 +18,4 @@ resource "aws_instance" "k3s_worker" {
     private_key = var.aws_private_key
     host        = self.private_ip 
   }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sleep 60",
-      "K3S_TOKEN=$(curl -s http://${aws_instance.k3s_master.public_ip}/tmp/k3s_token) curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.k3s_master.private_ip}:6443 K3S_TOKEN=$K3S_TOKEN sh -"
-    ]
-  }
 }
