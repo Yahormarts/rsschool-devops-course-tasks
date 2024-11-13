@@ -33,3 +33,15 @@ resource "aws_instance" "k3s_master" {
     timeout = "2m"
   }
 }
+
+resource "null_resource" "bastion_ready" {
+  depends_on = [aws_instance.bastion]
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'Waiting for Bastion to be ready...'",
+      "until nc -zv ${aws_instance.bastion.public_ip} 22; do echo 'Waiting for SSH on Bastion...'; sleep 10; done",
+      "echo 'Bastion is now ready for SSH.'"
+    ]
+  }
+}
