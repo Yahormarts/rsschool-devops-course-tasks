@@ -37,6 +37,16 @@ resource "aws_instance" "k3s_master" {
 resource "null_resource" "bastion_ready" {
   depends_on = [aws_instance.bastion]
 
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"
+    bastion_host = aws_instance.bastion.public_ip
+    agent       = false
+    private_key = var.aws_private_key
+    host        = aws_instance.bastion.private_ip
+    timeout = "2m"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "echo 'Waiting for Bastion to be ready...'",
