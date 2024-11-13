@@ -49,9 +49,7 @@ resource "null_resource" "bastion_ready" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo 'Waiting for Bastion to be ready...'",
-      "until nc -zv ${aws_instance.bastion.public_ip} 22; do echo 'Waiting for SSH on Bastion...'; sleep 10; done",
-      "echo 'Bastion is now ready for SSH.'"
+      "echo 'Waiting for Bastion to be ready...'"
     ]
   }
 }
