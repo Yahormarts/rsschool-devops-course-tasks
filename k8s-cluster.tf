@@ -90,14 +90,17 @@ resource "aws_instance" "k3s_worker" {
     timeout     = "10m"
   }
 
-  provisioner "local-exec" {
+ provisioner "local-exec" {
     command = <<EOT
-      echo "Waiting for K3s Master to be ready..."
+      echo "Waiting for K3s Master to provide token..."
       for i in {1..10}; do
-        curl -sf http://${aws_instance.k3s_master.private_ip}:6443 && break || sleep 10
+        ssh -i ${var.aws_private_key} -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} "test -f /var/lib/rancher/k3s/server/node-token" && break || sleep 10
       done
-      echo "K3s Master is ready. Installing K3s Worker."
-      K3S_TOKEN=$(curl -s http://${aws_instance.k3s_master.public_ip}/tmp/k3s_token) 
+
+      echo "Fetching K3S Token from Master..."
+      K3S_TOKEN=$(ssh -i ${var.aws_private_key} -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} "cat /var/lib/rancher/k3s/server/node-token")
+
+      echo "Installing K3s Worker..."
       curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.k3s_master.private_ip}:6443 K3S_TOKEN=$K3S_TOKEN sh -
     EOT
   }
