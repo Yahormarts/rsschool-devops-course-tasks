@@ -43,7 +43,7 @@ resource "aws_instance" "k3s_master" {
     bastion_host = aws_instance.bastion.public_ip
     agent       = false
     private_key = var.aws_private_key
-    host        = self.private_ip
+    host        = aws_instance.k3s_master.private_ip
     timeout     = "10m"
   }
 
@@ -94,12 +94,12 @@ resource "aws_instance" "k3s_worker" {
     command = <<EOT
       echo "Waiting for K3s Master to provide token..."
       for i in {1..10}; do
-        ssh -i <(echo "${var.aws_private_key}") -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} \
+        ssh -i ${var.aws_private_key} -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} \
           "test -f /var/lib/rancher/k3s/server/node-token" && break || sleep 10
       done
 
       echo "Fetching K3S Token from Master..."
-      K3S_TOKEN=$(ssh -i <(echo "${var.aws_private_key}") -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} \
+      K3S_TOKEN=$(ssh -i ${var.aws_private_key} -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} \
         "sudo cat /var/lib/rancher/k3s/server/node-token")
 
       echo "Installing K3s Worker..."
