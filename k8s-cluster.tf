@@ -73,7 +73,7 @@ resource "aws_instance" "k3s_worker" {
     bastion_host = aws_instance.bastion.public_ip
     agent       = false
     private_key = var.aws_private_key
-    host        = self.private_ip 
+    host        = aws_instance.k3s-worker-1.private_ip 
     timeout = "10m"
   }
 
