@@ -9,27 +9,6 @@ resource "aws_instance" "bastion" {
   tags = {
     Name = "bastion"
   }
-
-  connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    bastion_host = aws_instance.bastion.public_ip
-    agent       = false
-    private_key = var.aws_private_key
-    host        = aws_instance.bastion.private_ip
-    timeout = "10m"
-  }
-
-  provisioner "local-exec" {
-    command = <<EOT
-      set -x
-      sleep 60
-      echo 'Checking internet connectivity'
-      curl -I https://www.google.com || { echo 'No internet connectivity'; exit 1; }
-      echo 'Starting K3s installation'
-      sleep 60
-    EOT
-  }
 }
 
 resource "aws_instance" "k3s_master" {
