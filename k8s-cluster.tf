@@ -94,15 +94,16 @@ resource "aws_instance" "k3s_worker" {
     command = <<EOT
       echo "Waiting for K3s Master to provide token..."
       for i in {1..10}; do
-        ssh -i ${var.aws_private_key} -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} "test -f /var/lib/rancher/k3s/server/node-token" && break || sleep 10
+        ssh -i <(echo "${var.aws_private_key}") -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} \
+          "test -f /var/lib/rancher/k3s/server/node-token" && break || sleep 10
       done
 
       echo "Fetching K3S Token from Master..."
-      K3S_TOKEN=$(ssh -i ${var.aws_private_key} -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} "sudo cat /var/lib/rancher/k3s/server/node-token")
+      K3S_TOKEN=$(ssh -i <(echo "${var.aws_private_key}") -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} \
+        "sudo cat /var/lib/rancher/k3s/server/node-token")
 
       echo "Installing K3s Worker..."
       curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.k3s_master.private_ip}:6443 K3S_TOKEN=$K3S_TOKEN sh -
     EOT
   }
-
 }
