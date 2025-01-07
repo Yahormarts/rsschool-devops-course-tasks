@@ -159,7 +159,19 @@ resource "aws_instance" "k3s_worker" {
    ```
 
 ---
+Outputs
+After successful deployment, key outputs such as resource IDs, IP addresses, and URLs will be displayed. Example:
+ ```bash
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 
+Outputs:
+master_instance_ip = "12.34.56.78"
+worker_instance_ips = [
+  "12.34.56.79",
+  "12.34.56.80"
+]
+  ```
+---
 ## State Management
 
 This project uses an S3 bucket for remote state storage. Ensure the specified bucket exists in your AWS account or update the `bucket_name` variable in `backend.tf` to match an existing bucket.
