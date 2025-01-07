@@ -1,10 +1,6 @@
 # Overview
 This project is a Terraform-based infrastructure deployment for various cloud resources. It provides a robust framework for managing and deploying AWS resources using Infrastructure as Code (IaC) principles. The setup focuses on creating scalable and manageable infrastructure, promoting best practices in DevOps.
 
-[![Terraform Deployment](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-terraform.yml/badge.svg)](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-terraform.yml)
-
-[![Deploy to AWS](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-aws.yml/badge.svg)](https://github.com/Yahormarts/rsschool-devops-course-tasks/actions/workflows/deploy-aws.yml)
-
 _(SCREENSHOTS ARE BELLOW)_
 
 ## Getting Started
