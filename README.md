@@ -1,129 +1,185 @@
-# Overview
-This project is a Terraform-based infrastructure deployment for various cloud resources. It provides a robust framework for managing and deploying AWS resources using Infrastructure as Code (IaC) principles. The setup focuses on creating scalable and manageable infrastructure, promoting best practices in DevOps.
+# Infrastructure Deployment with Terraform
 
-_(SCREENSHOTS ARE BELLOW)_
+## Overview
+This project uses Terraform to deploy and manage AWS-based infrastructure, including a lightweight Kubernetes cluster (K3s). It provides a scalable and maintainable setup, adhering to Infrastructure as Code (IaC) best practices. Key components include bastion hosts, Kubernetes master and worker nodes, and networking configurations.
+
+(SCREENSHOTS ARE BELOW)
+
+---
 
 ## Getting Started
+
 ### Prerequisites
-Before you begin, ensure you have met the following requirements:
+Before beginning, ensure you have the following tools installed:
 
-**Configuration**
-1) Clone the Repository:
-```
+1. **AWS CLI**: Install and configure the AWS CLI with your credentials:
+   ```bash
+   export AWS_ACCESS_KEY_ID=<your_access_key>
+   export AWS_SECRET_ACCESS_KEY=<your_secret_key>
+   ```
+   
+2. **Terraform**: Install the latest version from [terraform.io](https://www.terraform.io/).
+
+3. **Git**: Install Git for version control.
+
+4. **SSH Key**: Ensure you have an SSH private key file configured for accessing EC2 instances.
+
+---
+
+### Clone the Repository
+```bash
 git clone https://github.com/Yahormarts/rsschool-devops-course-tasks.git
-
 cd rsschool-devops-course-tasks
 ```
-2) Set Up AWS Credentials: Ensure your AWS credentials are configured in your environment. This can be done by setting environment variables or through the AWS credentials file:
-```
-export AWS_ACCESS_KEY_ID=<your_access_key>
 
-export AWS_SECRET_ACCESS_KEY=<your_secret_key>
-```
-**Terraform**: Install Terraform (lastest version). You can download it from terraform.io.
+### Configuration
+Customize variables in `variables.tf` as needed:
+- **region**: AWS region for resource deployment (default: `eu-north-1`).
+- **bucket_name**: S3 bucket for Terraform state storage (default: `my-bucket-task-rs`).
 
-**AWS CLI**: Install and configure the AWS CLI. Make sure you have valid AWS credentials set up. Instructions can be found here.
-
-**Git**: Install Git for version control.
-
-**Variables**
-
-The following variables can be customized in variables.tf:
-
-1) region: The AWS region where resources will be deployed (default: eu-north-1).
-
-2) bucket_name: The name of the S3 bucket used for storing the Terraform state (default: my-bucket-task-rs).
+---
 
 ## Terraform Configuration Files
 
- `backend.tf`
-This file configures the backend for managing Terraform's state. It specifies remote storage options, allowing for safe collaboration among team members. The configuration may include settings for state locking, ensuring that multiple users cannot make changes simultaneously. This is essential for maintaining the integrity of the infrastructure state.
+### Key Files
+- **`backend.tf`**: Configures remote state storage with S3 and state locking with DynamoDB.
+- **`main.tf`**: Defines core infrastructure components like EC2 instances and S3 buckets.
+- **`gateway.tf`**: Configures networking gateways (API Gateway or VPC Gateway).
+- **`routes.tf`**: Sets routing rules for networking.
+- **`subnets.tf`**: Defines public and private subnet configurations within a VPC.
+- **`variables.tf`**: Declares variables for reuse and flexibility.
+- **`outputs.tf`**: Defines outputs such as resource IDs and IP addresses for visibility after deployment.
 
- `main.tf`
-The main configuration file that defines the core infrastructure components, including AWS resources such as EC2 instances and S3 buckets.
+---
 
- `gateway.tf`
-This file defines the configuration for the gateway resource used in our infrastructure. It includes specifications for the type of gateway (such as API Gateway or VPC Gateway), along with necessary parameters and integrations with other resources. The gateway's permissions and policies are also outlined here, ensuring secure access to related services. This is critical for enabling connectivity and managing traffic within our architecture.
+## Kubernetes Cluster Deployment
 
- `routes.tf`
-This file configures the routing rules for our infrastructure, defining how incoming requests are processed and directed to various backend services. It includes specific route definitions, integrations with other resources, and security measures to control access. Additionally, fallback routes are specified to ensure robust error handling and a smooth user experience. This configuration is vital for managing traffic flow and optimizing resource utilization within our architecture.
+### Bastion Host
+The bastion host is deployed in a public subnet and serves as a secure SSH gateway to private resources.
 
- `subnets.tf`
-This file defines the subnet configurations for our cloud infrastructure, specifying individual subnets with their respective CIDR blocks, availability zones, and association with the Virtual Private Cloud (VPC). It distinguishes between public and private subnets to enhance security by controlling internet access for sensitive resources. Additionally, route table associations are defined to manage traffic flow between subnets and other networks. This configuration is fundamental for structuring our network architecture effectively.
+#### Configuration Highlights:
+- AMI: `ami-070fe338fb2265e00`
+- Instance Type: `t3.micro`
+- Subnet: Public
 
- `variables.tf`
-Declares variables used throughout the Terraform configurations, allowing for more flexible and maintainable code.
+---
 
- `outputs.tf`
-Specifies outputs from the Terraform configuration, providing important information such as resource IDs and IP addresses after deployment.
+### K3s Master Node
+The master node runs the Kubernetes control plane in a private subnet and is accessible via the bastion host.
 
->An example of output in during the execution of the action:
-![outputs](https://github.com/user-attachments/assets/b2971d14-243a-4051-bd32-3065df61e915)
+#### Configuration Highlights:
+- AMI: `ami-070fe338fb2265e00`
+- Instance Type: `t3.micro`
+- Subnet: Private
 
-This allows you to make sure that everything works correctly and the infrastructure is actually created according to the configurations.
+#### Setup Process:
+1. Internet connectivity check.
+2. K3s installation using the official script.
+3. Validation of K3s installation.
+4. Exporting `node-token` for worker nodes to join the cluster.
 
-# Usage
+---
 
-To deploy the infrastructure, follow these steps:
+### K3s Worker Nodes
+Worker nodes join the Kubernetes cluster and run workloads. Two nodes are provisioned by default (adjustable).
 
-1) Initialize Terraform: This command will initialize your Terraform environment and download necessary providers
+#### Configuration Highlights:
+- AMI: `ami-070fe338fb2265e00`
+- Instance Type: `t3.micro`
+- Count: `2`
+- Subnet: Private
+
+#### Setup Process:
+1. Fetch the `node-token` from the master node through the bastion host.
+2. Join the cluster using the master node's private IP and `node-token`.
+3. Install the K3s agent.
+
+#### Sample Worker Configuration Code:
+```hcl
+resource "aws_instance" "k3s_worker" {
+  count = 2
+  ami = "ami-070fe338fb2265e00"
+  instance_type = "t3.micro"
+  subnet_id = aws_subnet.private_subnet_1.id
+  key_name = "deploy_key"
+  vpc_security_group_ids = [aws_security_group.k3s_sg.id]
+
+  tags = {
+    Name = "k3s-worker-${count.index}"
+  }
+
+  connection {
+    type = "ssh"
+    user = "ec2-user"
+    bastion_host = aws_instance.bastion.public_ip
+    agent = false
+    private_key = var.aws_private_key
+    host = self.private_ip
+    timeout = "10m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'Waiting for K3s Master to provide token...'",
+      "for i in {1..10}; do ssh -i <(echo \"${var.aws_private_key}\") -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} 'test -f /var/lib/rancher/k3s/server/node-token' && break || sleep 10; done",
+      "K3S_TOKEN=$(ssh -i <(echo \"${var.aws_private_key}\") -o StrictHostKeyChecking=no ec2-user@${aws_instance.k3s_master.private_ip} 'cat /var/lib/rancher/k3s/server/node-token')",
+      "curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.k3s_master.private_ip}:6443 K3S_TOKEN=$K3S_TOKEN sh -"
+    ]
+  }
+}
 ```
-terraform init
-```
-2) Format the Code (Optional): It is recommended to format the code to follow best practices.
-```
-terraform fmt
-```
-3) Validate the Configuration: Validate the Terraform files to ensure syntax correctness.
-```
-terraform validate
-```
-4) Plan the Deployment: Create an execution plan to preview changes that will be made.
-```
-terraform plan
-```
-5) Apply the Configuration: Deploy the infrastructure as defined in the configuration files.
-```
-terraform apply -auto-approve
-```
-**State Management**
 
-This project uses an S3 bucket for storing the Terraform state file. Ensure the specified bucket exists in your AWS account or modify the bucket_name variable to an existing bucket.
+---
 
-**Locking State**
+## Deployment Steps
 
-DynamoDB is used to manage state locking to prevent concurrent operations. Ensure you have a DynamoDB table configured with the proper name and permissions.
+1. **Initialize Terraform**
+   ```bash
+   terraform init
+   ```
 
-### Additional Notes
+2. **Format the Code (Optional)**
+   ```bash
+   terraform fmt
+   ```
 
-Always check for any required IAM permissions needed for the operations being performed.
-Monitor AWS service limits to avoid service interruptions.
+3. **Validate the Configuration**
+   ```bash
+   terraform validate
+   ```
 
-### Contributing
+4. **Plan the Deployment**
+   ```bash
+   terraform plan
+   ```
 
+5. **Apply the Configuration**
+   ```bash
+   terraform apply -auto-approve
+   ```
+
+---
+
+## State Management
+
+This project uses an S3 bucket for remote state storage. Ensure the specified bucket exists in your AWS account or update the `bucket_name` variable in `backend.tf` to match an existing bucket.
+
+**State Locking**: DynamoDB is configured to prevent concurrent operations.
+
+---
+
+## Contributing
 Contributions are welcome! Please follow these steps:
 
-- Fork the repository.
+1. Fork the repository.
+2. Create your feature branch.
+3. Commit your changes.
+4. Push to the branch.
+5. Open a Pull Request.
 
-- Create your feature branch.
+---
 
-- Commit your changes.
+## Screenshots
 
-- Push to the branch.
+*(Add relevant screenshots to showcase the infrastructure, outputs, and usage.)*
 
-- Open a Pull Request.
-
-## SCREENSHOTS
-
->IAM User created:
-![01_User_MFA](https://github.com/user-attachments/assets/e123704d-210d-4563-bdb6-d80c8053d288)
-
->S3 Bucket created:
-![02_Terraform_States_Bucket](https://github.com/user-attachments/assets/0c244f6e-807f-4865-bc7a-0941a31b4323)
-
-
->GitHUB Actions Role created:
-![02_Github_Action_Role](https://github.com/user-attachments/assets/0e34c7dd-abb5-4e74-a9d9-67bd10917ade)
-
->Infrastructure's Resourse map: 
-![resource map](https://github.com/user-attachments/assets/8cf25788-b7bc-483c-9f9f-2ea9548b2218)
